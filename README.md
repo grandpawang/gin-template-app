@@ -1,4 +1,4 @@
-# iGBS Cloud
+# gin template app
 
 基于Gin框架的Reaful API应用程序设计。
 
