@@ -1,0 +1,5 @@
+p, r1, /user/, GET|POST
+p, r1, /article/, GET|POST
+p, r1, /type/, GET|POST
+p, r1, /menu/, GET|POST
+p, r1, /role/, GET|POST

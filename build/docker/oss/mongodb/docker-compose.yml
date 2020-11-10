@@ -1,0 +1,18 @@
+version: "3"
+
+services:
+  mongodb:
+    image: mongo
+    container_name: mongo
+    environment:
+      - AUTH=yes
+      - ADMIN_USER=coint
+      - ADMIN_PASS=1234
+      - APPLICATION_DATABASE=gbbmn
+      - APPLICATION_USER=coint
+      - APPLICATION_PASS=1234
+    volumes:
+      - ./data:/data/db
+    ports:
+      - 27017:27017
+    restart: always

@@ -1,0 +1,20 @@
+version: "3"
+services:
+  portainer:
+    image: portainer/portainer
+    container_name: portainer
+    restart: always
+    ports:
+      - 9000:9000
+    command: "-H unix:///var/run/docker.sock"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./portainer_data/data:/data
+
+  jenkins:
+    container_name: jenkins
+    image: jenkins/jenkins:lts
+    ports:
+      - 8080:8080
+    volumes:
+      - ./jenkins_data:/var/jenkins_home

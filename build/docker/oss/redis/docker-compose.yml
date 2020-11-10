@@ -1,0 +1,16 @@
+version: "3"
+
+services:
+  redis:
+    image: redis
+    container_name: redis
+    stdin_open: true
+    tty: true
+    command:
+      - --appendonly yes
+      - --requirepass "1234"
+    ports:
+      - 6379:6379
+    volumes:
+      - ./data:/data
+      - ./config.conf:/usr/local/etc/redis/redis.conf

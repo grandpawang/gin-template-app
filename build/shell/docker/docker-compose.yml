@@ -1,0 +1,142 @@
+version: "3"
+services:
+  rabbitmq:
+    image: rabbitmq:management
+    container_name: rabbitmq
+    restart: always
+    hostname: rabbitmq
+    ports:
+      - 15672:15672
+      - 5672:5672
+    volumes:
+      - ./rabbitmq:/var/lib/rabbitmq
+    environment:
+      - RABBITMQ_DEFAULT_USER=root
+      - RABBITMQ_DEFAULT_PASS=root
+
+  portainer:
+    image: portainer/portainer
+    container_name: portainer
+    restart: always
+    ports:
+      - 9000:9000
+    command: "-H unix:///var/run/docker.sock"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./portainer_data/data:/data
+
+  # https://mirrors.tuna.tsinghua.edu.cn/jenkins/updates/update-center.json
+  jenkins:
+    container_name: jenkins
+    image: jenkins/jenkins:lts
+    ports:
+      - 8080:8080
+    volumes:
+      - ./jenkins_data:/var/jenkins_home
+
+  mqtt:
+    container_name: emqtt
+    image: emqx/emqx
+    ports:
+      - 1883:1883
+      - 8083:8083
+      - 8084:8084
+      - 18083:18083
+    stdin_open: true
+    tty: true
+
+  minio:
+    image: minio/minio:latest
+    container_name: minio
+    restart: always
+    ports:
+      - 2234:9000
+    volumes:
+      - "./minio:/data"
+    environment:
+      MINIO_ACCESS_KEY: "coint"
+      MINIO_SECRET_KEY: "123456789"
+    command: server /data
+
+  mysql-master:
+    image: mysql:5.7
+    container_name: mysql-master
+    environment:
+      MYSQL_ROOT_PASSWORD: "1234"
+      MYSQL_ROOT_HOST: "%"
+      MYSQL_USER: root
+      MYSQL_PASS: "1234"
+    ports:
+      - 3307:3306
+    restart: always
+    volumes:
+      - ./mysql/master:/var/lib/mysql
+      - ./cnf/mysql-master.cnf:/etc/my.cnf
+
+  mysql-slave1:
+    image: mysql:5.7
+    container_name: mysql-slave1
+    environment:
+      MYSQL_ROOT_PASSWORD: "1234"
+      MYSQL_ROOT_HOST: "%"
+      MYSQL_USER: root
+      MYSQL_PASS: "1234"
+    ports:
+      - 3308:3306
+    restart: always
+    volumes:
+      - ./mysql/slave1:/var/lib/mysql
+      - ./cnf/mysql-slave1.cnf:/etc/my.cnf
+
+  mysql-slave2:
+    image: mysql:5.7
+    container_name: mysql-slave2
+    environment:
+      MYSQL_ROOT_PASSWORD: "1234"
+      MYSQL_ROOT_HOST: "%"
+      MYSQL_USER: root
+      MYSQL_PASS: "1234"
+    ports:
+      - 3309:3306
+    restart: always
+    volumes:
+      - ./mysql/slave2:/var/lib/mysql
+      - ./cnf/mysql-slave2.cnf:/etc/my.cnf
+
+  redis:
+    image: redis
+    container_name: redis
+    stdin_open: true
+    tty: true
+    command:
+      - --appendonly yes
+      - --requirepass "1234"
+    ports:
+      - 6379:6379
+    volumes:
+      - ./redis:/data
+      - ./config.conf:/usr/local/etc/redis/redis.conf
+  # # now not use
+  # prometheus:
+  #   image: prom/prometheus
+  #   container_name: prometheus
+  #   ports:
+  #     - 9090:9090
+  #   volumes:
+  #     - ./cnf/prometheus.yml:/etc/prometheus/prometheus.yml
+  # grafana:
+  #   image: grafana/grafana
+  #   container_name: grafana
+  #   ports:
+  #     - 3000:3000
+  #   volumes:
+  #     - ./cnf/grafana.ini:/etc/grafana/grafana.ini
+  # node-exporter:
+  #   image: prom/node-exporter
+  #   container_name: node-exporter
+  #   ports:
+  #     - 9100:9100
+  #   volumes:
+  #     - "/proc:/host/proc:ro"
+  #     - "/sys:/host/sys:ro"
+  #     - "/:/rootfs:ro"

@@ -1,0 +1,14 @@
+version: "3"
+services:
+  minio:
+    image: minio/minio:latest
+    container_name: minio
+    restart: always
+    ports:
+      - 2234:9000
+    volumes:
+      - "./data:/data"
+    environment:
+      MINIO_ACCESS_KEY: "coint"
+      MINIO_SECRET_KEY: "123456789"
+    command: server /data

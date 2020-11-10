@@ -1,0 +1,46 @@
+version: "3"
+
+services:
+  mysql-master:
+    image: mysql:5.7
+    container_name: mysql-master
+    environment:
+      MYSQL_ROOT_PASSWORD: "1234"
+      MYSQL_ROOT_HOST: "%"
+      MYSQL_USER: root
+      MYSQL_PASS: "1234"
+    ports:
+      - 3307:3306
+    restart: always
+    volumes:
+      - ./db/master:/var/lib/mysql
+      - ./cnf/master.cnf:/etc/my.cnf
+
+  mysql-slave1:
+    image: mysql:5.7
+    container_name: mysql-slave1
+    environment:
+      MYSQL_ROOT_PASSWORD: "1234"
+      MYSQL_ROOT_HOST: "%"
+      MYSQL_USER: root
+      MYSQL_PASS: "1234"
+    ports:
+      - 3308:3306
+    restart: always
+    volumes:
+      - ./db/slave1:/var/lib/mysql
+      - ./cnf/slave1.cnf:/etc/my.cnf
+  mysql-slave2:
+    image: mysql:5.7
+    container_name: mysql-slave2
+    environment:
+      MYSQL_ROOT_PASSWORD: "1234"
+      MYSQL_ROOT_HOST: "%"
+      MYSQL_USER: root
+      MYSQL_PASS: "1234"
+    ports:
+      - 3309:3306
+    restart: always
+    volumes:
+      - ./db/slave2:/var/lib/mysql
+      - ./cnf/slave2.cnf:/etc/my.cnf

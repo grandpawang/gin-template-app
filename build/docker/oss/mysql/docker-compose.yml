@@ -1,0 +1,17 @@
+version: "3"
+
+services:
+  mysql-master:
+    image: mysql:5.7
+    container_name: mysql-master
+    environment:
+      MYSQL_ROOT_PASSWORD: "1234"
+      MYSQL_ROOT_HOST: "%"
+      MYSQL_USER: root
+      MYSQL_PASS: "1234"
+    ports:
+      - 3306:3306
+    restart: always
+    volumes:
+      - ./db:/var/lib/mysql
+      - ./my.ini:/etc/my.cnf

@@ -1,0 +1,17 @@
+[mysqld] 
+symbolic-links=0
+#实例ID,必须唯一
+server-id=1
+#开启binlog
+log-bin=mysql-bin
+#需要同步的数据库
+binlog-do-db=gbbmn
+#不需要同步的数据库
+binlog-ignore-db=mysql
+binlog-ignore-db=test
+binlog-ignore-db=information_schema
+binlog-ignore-db=performance_schema
+#如果错误跳过
+slave-skip-errors = all
+#设置最大包
+max_allowed_packet=4M
